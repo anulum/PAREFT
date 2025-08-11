@@ -1,5 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
+from dataclasses import asdict
 import numpy as np
 from .config import ExperimentConfig
 from .drive import ProgrammableDrive
@@ -47,10 +48,10 @@ def run_experiment(cfg: ExperimentConfig) -> dict:
     # Save order parameter r(t)
     save_order_parameter_csv(t, res["r"], str(outdir/"order_parameter.csv"))
 
-    # Metadata
+    # Metadata (bezpečne serializovateľné cez asdict)
     meta = {
-        "cfg": cfg.__dict__,
-        "tones": [t.__dict__ for t in cfg.drive.tones],
+        "cfg": asdict(cfg),
+        "tones": [asdict(tone) for tone in cfg.drive.tones],
         "notes": "PAREFT scaffold v0.1",
     }
     save_metadata_json(meta, str(outdir/"metadata.json"))
