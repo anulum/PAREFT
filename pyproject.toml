@@ -8,7 +8,6 @@ version = "0.1.0"
 description = "Programmable Axidilaton Resonant EFT research scaffold"
 readme = "README.md"
 requires-python = ">=3.10"
-authors = [{ name = "Anulum Institute", email = "info@anulum.example" }]
 dependencies = [
   "numpy>=1.24",
   "scipy>=1.11",
@@ -18,10 +17,3 @@ dependencies = [
 
 [project.scripts]
 pareft = "pareft.cli:main"
-
-[tool.setuptools]
-include-package-data = false
-
-[tool.setuptools.packages.find]
-include = ["pareft*"]
-exclude = ["tests*", "scripts*", "configs*", "workflows*", ".github*"]

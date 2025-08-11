@@ -2,16 +2,12 @@
 from __future__ import annotations
 import argparse
 from pathlib import Path
-from pareft.config import load_config, ExperimentConfig, Tone
+from pareft.config import load_config, Tone
 from pareft.simulate import run_experiment
 
 CHANNELS = {
-    "C1": {"amp_scale": 0.8},
-    "C2": {"amp_scale": 0.9},
-    "C3": {"amp_scale": 1.0},
-    "C4": {"amp_scale": 1.2},
-    "C5": {"amp_scale": 1.0},
-    "C6": {"amp_scale": 1.1},
+    "C1": {"amp_scale": 0.8}, "C2": {"amp_scale": 0.9}, "C3": {"amp_scale": 1.0},
+    "C4": {"amp_scale": 1.2}, "C5": {"amp_scale": 1.0}, "C6": {"amp_scale": 1.1}
 }
 
 def main():
@@ -27,14 +23,10 @@ def main():
                     help="Comma-separated amplitudes")
     ap.add_argument("--phases", type=str, default="0.0,1.57,0.0",
                     help="Comma-separated phases (rad)")
-
-    # nové voľby
-    ap.add_argument("--save-raw", type=int, choices=[0,1], default=1,
-                    help="Save raw timeseries CSV (t,J,phi,r). 1=yes, 0=no (default: 1)")
-    ap.add_argument("--save-plots", type=int, choices=[0,1], default=1,
-                    help="Save PNG plots during simulation. 1=yes, 0=no (default: 1)")
-
+    ap.add_argument("--save-raw", type=int, choices=[0,1], default=0,
+                    help="Save raw time series CSV (0/1)")
     args = ap.parse_args()
+
     cfg = load_config(args.config)
 
     ch = [c.strip().upper() for c in args.triplet.split(",")]
@@ -46,7 +38,6 @@ def main():
     if not (len(ch) == len(dur) == len(freqs) == len(amps) == len(phases)):
         raise SystemExit("All lists must have the same length")
 
-    # Build tones with channel scaling
     tones = []
     for i in range(len(ch)):
         scale = CHANNELS.get(ch[i], {"amp_scale": 1.0})["amp_scale"]
@@ -56,7 +47,7 @@ def main():
     cfg.drive.tones = tones
     cfg.drive.duration = sum(dur)
 
-    run_experiment(cfg, save_raw=bool(args.save_raw), save_plots=bool(args.save_plots))
+    run_experiment(cfg, save_raw=bool(args.save_raw), save_png=True)
     print("Finished. Outputs in", cfg.outdir)
 
 if __name__ == "__main__":
