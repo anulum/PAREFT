@@ -1,0 +1,28 @@
+seed: 1337
+outdir: outputs/example
+
+drive:
+  duration: 60.0   # seconds
+  dt: 0.001        # seconds (1 kHz)
+  tones:
+    - {freq: 1.0, amp: 0.5, phase: 0.0}
+    - {freq: 3.0, amp: 0.2, phase: 1.57}
+  envelope: {kind: hann, tau: 2.0}
+  mask: {kind: uniform, sigma: 1.0}
+
+network:
+  N: 256
+  K: 2.0
+  M: 1.0
+  gamma: 0.5
+  omega_spread: 0.2
+  delay: 0.0
+  noise_std: 0.01
+
+eft:
+  Lambda: 1000.0
+  c_sigma: 1e-4
+  c_a: 1e-4
+  m_phi: 2.0
+  lambda_phi: 0.1
+  damping: 0.05
