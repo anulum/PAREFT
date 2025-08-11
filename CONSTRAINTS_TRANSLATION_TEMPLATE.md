@@ -1,0 +1,3 @@
+- Translate null result to bounds on (c_a/M), (c_sigma/M), ξ via response model.
+- Report lexicographic order (n_J,n_Q,n_c) used and d_tot cutoff.
+- Provide priors, posteriors, and sensitivity curves.
