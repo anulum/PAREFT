@@ -15,4 +15,7 @@ dependencies = [
   "scipy>=1.11",
   "pyyaml>=6.0",
   "matplotlib>=3.7",
+  printf '\n[project.scripts]\npareft = "pareft.cli:main"\n' >> pyproject.toml
 ]
+[project.scripts]
+pareft = "pareft.cli:main"

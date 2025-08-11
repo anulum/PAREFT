@@ -1,2 +1,3 @@
-from .probes import save_psd_csv
-__all__ = ["save_psd_csv"]
+"""PAREFT research scaffold package."""
+__all__ = []
+__version__ = "0.1.0"

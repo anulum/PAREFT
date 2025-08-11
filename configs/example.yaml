@@ -2,8 +2,8 @@ seed: 1337
 outdir: outputs/example
 
 drive:
-  duration: 60.0   # seconds
-  dt: 0.001        # seconds (1 kHz)
+  duration: 60.0   # s
+  dt: 0.001        # s (1 kHz)
   tones:
     - {freq: 1.0, amp: 0.5, phase: 0.0}
     - {freq: 3.0, amp: 0.2, phase: 1.57}
