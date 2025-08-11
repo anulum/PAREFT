@@ -2,6 +2,12 @@
 
 ]633;E;echo '![tests](https://github.com/anulum/PAREFT/actions/workflows/python-tests.yml/badge.svg)';60035e90-6489-45b3-81bf-340f3bd231c9]633;C![tests](https://github.com/anulum/PAREFT/actions/workflows/python-tests.yml/badge.svg)
 
+{ 
+  echo '![tests](https://github.com/anulum/PAREFT/actions/workflows/python-tests.yml/badge.svg)';
+  echo;
+  cat README.md 2>/dev/null;
+} > README.tmp && mv README.tmp README.md
+
 # PAREFT Scaffold
 ![tests](https://github.com/anulum/PAREFT/actions/workflows/python-tests.yml/badge.svg)
 
