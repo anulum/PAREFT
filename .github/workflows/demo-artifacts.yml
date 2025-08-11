@@ -1,0 +1,69 @@
+name: demo-artifacts
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install package (editable)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Create tiny CI demo config
+        run: |
+          mkdir -p configs
+          cat > configs/ci_demo.yaml <<'CFG'
+          seed: 1337
+          outdir: outputs/ci_demo
+
+          drive:
+            duration: 5.0
+            dt: 0.002
+            tones:
+              - {freq: 1.0, amp: 0.5, phase: 0.0}
+              - {freq: 3.0, amp: 0.2, phase: 1.0}
+            envelope: {kind: hann, tau: 0.5}
+            mask: {kind: uniform, sigma: 1.0}
+
+          network:
+            N: 64
+            K: 1.5
+            M: 1.0
+            gamma: 0.5
+            omega_spread: 0.2
+            delay: 0.0
+            noise_std: 0.01
+
+          eft:
+            Lambda: 1000.0
+            c_sigma: 1e-4
+            c_a: 1e-4
+            m_phi: 2.0
+            lambda_phi: 0.1
+            damping: 0.05
+          CFG
+
+      - name: Run demo (saves PNG/CSV during simulation)
+        run: |
+          pareft configs/ci_demo.yaml --triplet C2,C3,C6 --durations 2,1,2 --save-raw 1 --save-plots 1
+          ls -la outputs/ci_demo || true
+
+      - name: Upload artifacts (PNG + CSV + metadata)
+        uses: actions/upload-artifact@v4
+        with:
+          name: pareft-demo-outputs
+          path: |
+            outputs/ci_demo/*.png
+            outputs/ci_demo/*.csv
+            outputs/ci_demo/*.json
