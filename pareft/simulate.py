@@ -18,7 +18,6 @@ def run_experiment(cfg: ExperimentConfig) -> dict:
 
     # Frequency-domain response (symbolic single-mode placeholder)
     chi = Susceptibility(cfg.eft)
-    # FFT (rfft for real signals)
     dt = cfg.drive.dt
     Jw = np.fft.rfft(Jt)
     freqs = np.fft.rfftfreq(len(Jt), d=dt) * 2*np.pi  # rad/s
@@ -26,7 +25,6 @@ def run_experiment(cfg: ExperimentConfig) -> dict:
     phi_t = np.fft.irfft(Phi_w, n=len(Jt))  # induced field proxy (scalar channel)
 
     # Network dynamics (phase-locked ensemble) driven at dominant tone
-    # Choose the highest amplitude tone as Ω
     tones = sorted(cfg.drive.tones, key=lambda x: x.amp, reverse=True)
     Omega = 2*np.pi*tones[0].freq if tones else 0.0
     F = tones[0].amp if tones else 0.0
@@ -48,7 +46,11 @@ def run_experiment(cfg: ExperimentConfig) -> dict:
     # Save order parameter r(t)
     save_order_parameter_csv(t, res["r"], str(outdir/"order_parameter.csv"))
 
-    # Metadata (bezpečne serializovateľné cez asdict)
+    # Save raw timeseries (so analysis can compute PLV(J,phi))
+    ts = np.column_stack([t, Jt, phi_t, res["r"]])
+    np.savetxt(outdir/"timeseries.csv", ts, delimiter=",", header="t,J,phi,r", comments="")
+
+    # Metadata (use dataclasses.asdict for JSON-serializable structure)
     meta = {
         "cfg": asdict(cfg),
         "tones": [asdict(tone) for tone in cfg.drive.tones],
